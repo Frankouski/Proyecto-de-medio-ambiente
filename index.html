@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marea Limpia — Huanchaco</title>
+<meta name="description" content="La contaminación en Huanchaco, en cifras. Causas, consecuencias y una encuesta para mapear el problema.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ocean-deep:#0A3A48;
+    --ocean:#0E4F63;
+    --ocean-mid:#13627A;
+    --sand:#F1E9D8;
+    --sand-soft:#F8F3E8;
+    --foam:#FFFDF8;
+    --ink:#142B33;
+    --totora:#5C7A3F;
+    --totora-dark:#445E2C;
+    --alert:#C9512E;
+    --alert-soft:#F0DCD2;
+    --line:rgba(20,43,51,0.12);
+    --line-light:rgba(255,253,248,0.18);
+    --shadow:0 18px 40px -20px rgba(10,58,72,0.35);
+    --radius:14px;
+    --maxw:980px;
+    font-size:16px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--sand-soft);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit;}
+  h1,h2,h3{
+    font-family:'Space Grotesk', system-ui, sans-serif;
+    line-height:1.08;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:600;
+    opacity:0.78;
+  }
+  button, .btn{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-weight:600;
+    cursor:pointer;
+    border-radius:999px;
+    border:1px solid transparent;
+  }
+  a:focus-visible, button:focus-visible{
+    outline:3px solid var(--alert);
+    outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,58,72,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line-light);
+  }
+  .nav__row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px;
+    color:var(--foam);
+  }
+  .nav__brand{
+    display:flex; align-items:baseline; gap:8px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700; font-size:1.05rem;
+  }
+  .nav__brand span{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:500; font-size:0.7rem; opacity:0.65;
+  }
+  .nav__cta{
+    background:var(--alert); color:var(--foam);
+    padding:9px 16px; font-size:0.82rem; text-decoration:none;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      linear-gradient(180deg, rgba(8,45,56,0.80) 0%, rgba(8,45,56,0.92) 65%, var(--ocean-deep) 100%),
+      url('https://commons.wikimedia.org/wiki/Special:FilePath/Balneario_de_Huanchaco.JPG?width=1400') center 60%/cover no-repeat;
+    color:var(--foam);
+    padding:64px 0 36px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero__grid{
+    display:block; max-width:38rem;
+  }
+  .hero h1{
+    font-size:clamp(1.9rem, 5.5vw, 2.7rem);
+    margin:14px 0 16px;
+    max-width:18ch;
+  }
+  .hero p{
+    max-width:46ch; opacity:0.92; font-size:1rem;
+  }
+  .hero__status{
+    margin-top:24px;
+    display:flex; align-items:center; gap:16px;
+    border:1px solid var(--line-light);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    background:rgba(255,253,248,0.06);
+  }
+  .hero__status strong{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:2.1rem; font-weight:600; color:var(--alert);
+    line-height:1;
+  }
+  .hero__status small{
+    display:block; font-size:0.8rem; opacity:0.85; max-width:32ch;
+  }
+  .hero__actions{
+    margin-top:26px; display:flex; gap:12px; flex-wrap:wrap;
+  }
+  .btn--primary{
+    background:var(--alert); color:var(--foam); padding:13px 22px;
+    text-decoration:none; font-size:0.92rem;
+  }
+  .btn--ghost{
+    background:transparent; color:var(--foam); border-color:var(--line-light);
+    padding:13px 22px; text-decoration:none; font-size:0.92rem;
+  }
+  .hero__art{ margin-top:8px; opacity:0.95; }
+
+  /* ---------- SECTION SHELLS ---------- */
+  .section{ padding:56px 0; }
+  .section--sand{ background:var(--sand); }
+  .section--foam{ background:var(--foam); }
+  .section--dark{ background:linear-gradient(160deg, var(--ocean) 0%, var(--ocean-deep) 100%); color:var(--foam); }
+  .section__head{ max-width:54ch; margin-bottom:32px; }
+  .section__head h2{ font-size:clamp(1.4rem,3.6vw,1.9rem); margin-top:10px; }
+  .section--dark .eyebrow{ opacity:0.7; }
+
+  /* ---------- DIAGNÓSTICO ---------- */
+  .diag__grid{
+    display:grid; gap:16px;
+    grid-template-columns:repeat(auto-fit, minmax(210px,1fr));
+  }
+  .diag__card{
+    background:var(--foam);
+    border-radius:var(--radius);
+    border-top:4px solid var(--alert);
+    padding:20px 18px;
+    box-shadow:var(--shadow);
+  }
+  .diag__num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(1.5rem,4vw,1.9rem);
+    font-weight:600;
+    color:var(--ocean-deep);
+    display:block;
+    margin-bottom:8px;
+  }
+  .diag__card p{ font-size:0.88rem; margin:0; opacity:0.85; }
+  .diag__source{ margin-top:20px; font-size:0.78rem; opacity:0.6; }
+
+  /* ---------- CAUSAS ---------- */
+  .causas__grid{
+    display:grid; gap:18px;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+  }
+  .causa{
+    display:flex; gap:14px; align-items:flex-start;
+    padding:18px; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--sand-soft);
+  }
+  .causa .icon{ width:26px; height:26px; flex:none; color:var(--ocean-deep); margin-top:2px; }
+  .causa h3{ font-size:1rem; margin-bottom:4px; }
+  .causa p{ margin:0; font-size:0.88rem; opacity:0.8; }
+
+  /* ---------- CONSECUENCIAS ---------- */
+  .conse__grid{
+    display:grid; gap:24px;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  }
+  .conse .icon{ width:30px; height:30px; color:var(--alert); margin-bottom:10px; }
+  .conse h3{ font-size:1.05rem; margin-bottom:6px; }
+  .conse p{ margin:0; font-size:0.9rem; opacity:0.85; max-width:34ch; }
+
+  /* ---------- ENCUESTA ---------- */
+  .encuesta__card{
+    background:var(--ocean-deep); color:var(--foam);
+    border-radius:18px; padding:36px 28px;
+    text-align:center;
+    box-shadow:var(--shadow);
+  }
+  .encuesta__card h2{ font-size:clamp(1.3rem,3.6vw,1.7rem); margin:10px 0 12px; }
+  .encuesta__card p{ max-width:42ch; margin:0 auto 22px; opacity:0.9; font-size:0.95rem; }
+  .encuesta__fine{ margin-top:14px; font-size:0.76rem; opacity:0.65; }
+
+  /* ---------- ACCIONES ---------- */
+  .acciones__grid{
+    display:grid; gap:14px;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+  }
+  .accion{
+    display:flex; gap:12px; padding:16px; border-radius:var(--radius);
+    background:var(--sand-soft); border:1px solid var(--line);
+  }
+  .accion .icon{ width:22px; height:22px; flex:none; color:var(--totora); margin-top:2px; }
+  .accion strong{ display:block; font-size:0.95rem; margin-bottom:2px; }
+  .accion span{ font-size:0.85rem; opacity:0.78; }
+
+  /* ---------- PHOTO BREAK ---------- */
+  .photo-break{
+    position:relative; border-radius:18px; overflow:hidden;
+    min-height:220px; display:flex; align-items:flex-end;
+    box-shadow:var(--shadow);
+  }
+  .photo-break img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .photo-break__caption{
+    position:relative; z-index:1; color:var(--foam);
+    padding:18px 20px; font-size:0.88rem;
+    background:linear-gradient(0deg, rgba(8,45,56,0.85), transparent);
+    width:100%;
+  }
+  .credit{ font-size:0.72rem; opacity:0.55; margin-top:6px; }
+
+  /* ---------- PHOTO GRID ---------- */
+  .photo-grid{
+    display:grid;
+    gap:12px;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:200px 200px;
+    margin:0 0 0;
+  }
+  .photo-grid__item{
+    border-radius:14px;
+    overflow:hidden;
+    position:relative;
+  }
+  .photo-grid__item img{
+    width:100%; height:100%; object-fit:cover;
+    display:block;
+    transition:transform .4s ease;
+  }
+  .photo-grid__item:hover img{ transform:scale(1.04); }
+  .photo-grid__item--tall{
+    grid-row:span 2;
+  }
+  .photo-grid__label{
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(0deg, rgba(8,45,56,0.82), transparent);
+    color:#fff;
+    font-size:0.78rem;
+    padding:14px 12px 10px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:500;
+  }
+
+  /* ---------- SPLIT FOTO + TEXTO ---------- */
+  .split{
+    display:grid;
+    gap:28px;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    padding:48px 0;
+  }
+  .split__img{
+    border-radius:18px;
+    overflow:hidden;
+    height:280px;
+    box-shadow:var(--shadow);
+  }
+  .split__img img{
+    width:100%; height:100%; object-fit:cover;
+  }
+  .split__text h2{
+    font-size:clamp(1.3rem,3vw,1.7rem);
+    margin-bottom:12px;
+  }
+  .split__text p{
+    font-size:0.95rem;
+    opacity:0.82;
+    max-width:38ch;
+  }
+  @media(max-width:680px){
+    .photo-grid{ grid-template-columns:1fr 1fr; grid-template-rows:150px 150px; }
+    .split{ grid-template-columns:1fr; }
+    .split__img{ height:220px; }
+  }
+
+  /* ---------- FOOTER ---------- */
+  .footer{
+    background:var(--ocean-deep); color:var(--foam);
+    padding:48px 0 32px;
+  }
+  .footer__grid{
+    display:grid; gap:32px;
+    grid-template-columns:1.3fr 1fr;
+  }
+  .footer h3{ font-size:1rem; margin-bottom:10px; font-family:'Space Grotesk',sans-serif; }
+  .footer p{ font-size:0.85rem; opacity:0.78; max-width:42ch; }
+  .share__box{
+    background:rgba(255,253,248,0.06); border:1px solid var(--line-light);
+    border-radius:var(--radius); padding:18px; text-align:center;
+  }
+  #share-qr{ display:flex; justify-content:center; margin:10px 0; min-height:128px; align-items:center; }
+  #share-qr canvas, #share-qr img{ border-radius:8px; background:#fff; padding:6px; }
+  .qr-note{ font-size:0.78rem; opacity:0.7; max-width:28ch; margin:0 auto; }
+  .copy-btn{
+    background:transparent; color:var(--foam); border:1px solid var(--line-light);
+    padding:9px 16px; font-size:0.82rem; margin-top:8px;
+  }
+  .footer__bottom{
+    margin-top:32px; padding-top:20px; border-top:1px solid var(--line-light);
+    font-size:0.76rem; opacity:0.6;
+  }
+
+  @media (max-width:760px){
+    .footer__grid{ grid-template-columns:1fr; }
+  }
+
+  /* scroll reveal */
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.is-visible{ opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<!-- Sprite de íconos (línea simple, reutilizados con <use>) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="icon-pipe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M3 7h7a4 4 0 0 1 4 4v6"/><circle cx="14" cy="19" r="1.4" fill="currentColor" stroke="none"/>
+      <path d="M16 19c2-3 5-1 5-4"/>
+    </symbol>
+    <symbol id="icon-trash-city" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M3 19l5-12 5 12"/><path d="M13 19l4-9 4 9"/><path d="M2 19h21"/>
+    </symbol>
+    <symbol id="icon-bottle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M10 3h4v3l2 2v12a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V8l2-2z"/><path d="M9 12h6"/>
+    </symbol>
+    <symbol id="icon-tap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M4 9h13a3 3 0 0 1 3 3v2"/><circle cx="6" cy="9" r="2.4"/><path d="M11 13v6"/>
+    </symbol>
+    <symbol id="icon-health" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M12 21s-7-4.4-9-9a5 5 0 0 1 9-4 5 5 0 0 1 9 4c-2 4.6-9 9-9 9z"/>
+    </symbol>
+    <symbol id="icon-fish" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M3 12c4-5 13-6 18-1-5 5-14 4-18-1z"/><circle cx="16" cy="11" r="0.8" fill="currentColor" stroke="none"/>
+      <path d="M21 11l2-3-1 4 1 4-2-3"/>
+    </symbol>
+    <symbol id="icon-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v9M9.5 14c0 1.4 1.2 2 2.5 2 1.6 0 3-0.7 3-2s-1-1.7-3-2.1c-2-0.4-3-1-3-2.1 0-1.2 1.3-1.9 3-1.9 1.2 0 2.2 0.4 2.6 1.3"/>
+    </symbol>
+    <symbol id="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M6 8h12l-1 13H7L6 8z"/><path d="M9 8a3 3 0 0 1 6 0"/>
+    </symbol>
+    <symbol id="icon-reduce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M5 12h14M5 12l4-4M5 12l4 4"/>
+    </symbol>
+    <symbol id="icon-broom" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M20 4l-9 9"/><path d="M9 15l-6 5"/><path d="M9 15c-2 0-5-3-5-5l6-1 4 4c-1 1.6-3 2-5 2z"/>
+    </symbol>
+    <symbol id="icon-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M5 21V4"/><path d="M5 5c3-2 6 1 9-1v9c-3 2-6-1-9 1"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <div class="nav__brand">Marea Limpia <span>· Huanchaco</span></div>
+    <a class="nav__cta" href="#encuesta">Reportar</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="inicio">
+    <div class="wrap hero__grid">
+      <p class="eyebrow">Boletín costero · Huanchaco</p>
+      <h1>Huanchaco tiene un problema que no se ve a simple vista.</h1>
+      <p>Huankarute, Huanchaquito y El Mirador: ninguna playa de Huanchaco aprobó el último control sanitario.</p>
+
+      <div class="hero__status">
+        <strong class="mono">0/3</strong>
+        <small>playas de Huanchaco aptas para bañistas, según la Geresa La Libertad.</small>
+      </div>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#diagnostico">Ver cifras</a>
+        <a class="btn btn--ghost" href="#encuesta">Reportar →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DIAGNÓSTICO ============ -->
+  <section class="section section--sand reveal" id="diagnostico">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">El diagnóstico</p>
+        <h2>En cifras</h2>
+      </div>
+
+      <div class="diag__grid">
+        <div class="diag__card">
+          <span class="diag__num">69%</span>
+          <p>de la basura en playas del Perú es plástico.</p>
+        </div>
+        <div class="diag__card">
+          <span class="diag__num">+1,600 NMP</span>
+          <p>de coliformes en Huankarute: 8 veces el límite permitido.</p>
+        </div>
+        <div class="diag__card">
+          <span class="diag__num">1%</span>
+          <p>del plástico se recicla formalmente en el país.</p>
+        </div>
+        <div class="diag__card">
+          <span class="diag__num">0/3</span>
+          <p>playas de Huanchaco aptas para bañarse hoy.</p>
+        </div>
+      </div>
+      <p class="diag__source">Fuentes: Científicos de la Basura (2025) · Geresa La Libertad.</p>
+    </div>
+  </section>
+
+  <!-- ============ FOTO: caballitos de totora ============ -->
+  <div class="wrap" style="padding:0 24px 0;">
+    <div class="photo-break">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Reed_boat_in_Huanchaco.jpg?width=1000" alt="Caballito de totora en la playa de Huanchaco" loading="lazy">
+      <p class="photo-break__caption">3,000 años de pesca en caballito de totora, hoy amenazados por la contaminación.</p>
+    </div>
+  </div>
+
+  <!-- ============ GALERÍA DE FOTOS ============ -->
+  <section class="section section--foam" style="padding-bottom:0;">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">Así es Huanchaco</p>
+        <h2>Lo que queremos proteger</h2>
+      </div>
+      <div class="photo-grid">
+        <div class="photo-grid__item photo-grid__item--tall">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cabalitos_de_totora_P1010229mod.jpg?width=600" alt="Caballitos de totora Huanchaco" loading="lazy">
+          <span class="photo-grid__label">Caballitos de totora — tradición milenaria</span>
+        </div>
+        <div class="photo-grid__item">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Playa_de_Huanchaco_10.jpg?width=600" alt="Playa de Huanchaco" loading="lazy">
+          <span class="photo-grid__label">La playa que necesita cuidado</span>
+        </div>
+        <div class="photo-grid__item">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vista_de_Huanchaco%2C_Per%C3%BA.JPG?width=600" alt="Vista panorámica de Huanchaco" loading="lazy">
+          <span class="photo-grid__label">Huanchaco desde el muelle</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CAUSAS ============ -->
+  <section class="section section--foam reveal" id="causas">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">¿De dónde viene?</p>
+        <h2>Cuatro causas</h2>
+      </div>
+
+      <div class="causas__grid">
+        <div class="causa">
+          <svg class="icon"><use href="#icon-pipe"/></svg>
+          <div>
+            <h3>Desagüe sin tratar</h3>
+            <p>Aguas servidas que llegan directo a la arena.</p>
+          </div>
+        </div>
+        <div class="causa">
+          <svg class="icon"><use href="#icon-trash-city"/></svg>
+          <div>
+            <h3>Basura urbana</h3>
+            <p>Residuos arrastrados desde calles y canales.</p>
+          </div>
+        </div>
+        <div class="causa">
+          <svg class="icon"><use href="#icon-bottle"/></svg>
+          <div>
+            <h3>Plástico de un solo uso</h3>
+            <p>Botellas y bolsas que dejan los visitantes.</p>
+          </div>
+        </div>
+        <div class="causa">
+          <svg class="icon"><use href="#icon-tap"/></svg>
+          <div>
+            <h3>Falta de infraestructura</h3>
+            <p>Pocos tachos y servicios higiénicos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONSECUENCIAS ============ -->
+  <section class="section section--dark reveal" id="consecuencias">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">En juego</p>
+        <h2>No es solo paisaje</h2>
+      </div>
+
+      <div class="conse__grid">
+        <div class="conse">
+          <svg class="icon"><use href="#icon-health"/></svg>
+          <h3>Salud</h3>
+          <p>Infecciones y males gastrointestinales.</p>
+        </div>
+        <div class="conse">
+          <svg class="icon"><use href="#icon-fish"/></svg>
+          <h3>Vida marina</h3>
+          <p>Daño a aves, lobos marinos y totorales.</p>
+        </div>
+        <div class="conse">
+          <svg class="icon"><use href="#icon-coin"/></svg>
+          <h3>Economía</h3>
+          <p>Menos turismo, menos pesca artesanal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SPLIT: foto contaminación ============ -->
+  <div class="section--sand">
+    <div class="wrap">
+      <div class="split reveal">
+        <div class="split__img">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Reed_boat_in_Huanchaco.jpg?width=800" alt="Pescador en caballito de totora Huanchaco" loading="lazy">
+        </div>
+        <div class="split__text">
+          <p class="eyebrow">¿Sabías que?</p>
+          <h2>Huanchaco es Reserva Mundial de Surf desde 2013</h2>
+          <p>La primera en Latinoamérica. Esas mismas olas que atrajeron ese reconocimiento hoy traen también residuos desde la ciudad.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ENCUESTA ============ -->
+  <section class="section section--sand reveal" id="encuesta">
+    <div class="wrap">
+      <div class="encuesta__card">
+        <p class="eyebrow">Ayúdanos</p>
+        <h2>¿Qué ves en la playa?</h2>
+        <p>Repórtalo en 2 minutos.</p>
+
+        <!--
+          INSTRUCCIONES PARA PERSONALIZAR ESTE BOTÓN:
+          1) Crea un Google Form con las preguntas de la encuesta.
+          2) Copia el enlace para compartir del formulario.
+          3) Reemplaza el texto REEMPLAZA_CON_TU_LINK_DE_GOOGLE_FORM de abajo por ese enlace.
+        -->
+        <a class="btn btn--primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdvA11kdjQuvhj9I0OzNLtyvBo12DFo8Abc7hlQ8TPYyu37Lw/viewform?usp=publish-editor" target="_blank" rel="noopener">Responder la encuesta →</a>
+
+        <p class="encuesta__fine">Respuestas anónimas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACCIONES ============ -->
+  <section class="section section--foam reveal" id="acciones">
+    <div class="wrap">
+      <div class="section__head">
+        <p class="eyebrow">Hoy puedes</p>
+        <h2>Cuatro acciones</h2>
+      </div>
+
+      <div class="acciones__grid">
+        <div class="accion">
+          <svg class="icon"><use href="#icon-bag"/></svg>
+          <div><strong>Llévate tu basura</strong></div>
+        </div>
+        <div class="accion">
+          <svg class="icon"><use href="#icon-reduce"/></svg>
+          <div><strong>Lleva botella y bolsa reutilizable</strong></div>
+        </div>
+        <div class="accion">
+          <svg class="icon"><use href="#icon-broom"/></svg>
+          <div><strong>Súmate a una limpieza</strong></div>
+        </div>
+        <div class="accion">
+          <svg class="icon"><use href="#icon-flag"/></svg>
+          <div><strong>Reporta los puntos críticos</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <div>
+      <h3>Marea Limpia</h3>
+      <p>Proyecto de educación ambiental sobre Huanchaco.</p>
+      <div class="footer__bottom">
+        Fuentes: Científicos de la Basura (2025) · Geresa La Libertad.<br>
+        Fotos: Wikimedia Commons (CC BY-SA).
+      </div>
+    </div>
+    <div class="share__box">
+      <h3>Comparte esta página</h3>
+      <div id="share-qr"></div>
+      <button class="copy-btn" id="copy-link-btn" type="button">Copiar enlace</button>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // Revelado suave al hacer scroll (respeta prefers-reduced-motion vía CSS)
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){
+      els.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function(el){ obs.observe(el); });
+  })();
+
+  // QR de la propia página (útil para imprimir afiches o compartirla más)
+  (function(){
+    var el = document.getElementById('share-qr');
+    if(!el) return;
+    if(location.protocol === 'file:'){
+      el.innerHTML = '<p class="qr-note">El código QR aparecerá aquí automáticamente cuando esta página esté publicada en una URL real.</p>';
+      return;
+    }
+    try{
+      new QRCode(el, { text: location.href, width:128, height:128, colorDark:"#0A3A48", colorLight:"#ffffff" });
+    }catch(e){
+      el.innerHTML = '<p class="qr-note">No se pudo generar el QR aquí. Usa cualquier generador de QR con el enlace de esta página.</p>';
+    }
+  })();
+
+  // Copiar enlace
+  (function(){
+    var btn = document.getElementById('copy-link-btn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      navigator.clipboard.writeText(location.href).then(function(){
+        var original = btn.textContent;
+        btn.textContent = '¡Copiado!';
+        setTimeout(function(){ btn.textContent = original; }, 1800);
+      }).catch(function(){
+        btn.textContent = 'Copia manualmente: ' + location.href;
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
